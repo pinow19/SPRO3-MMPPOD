@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"name": "Motorboardcontrol",
+			"path": "Motorboardcontrol"
+		},
+		{
+			"name": "Hallsensor",
+			"path": "Hallsensor"
+		},
+		{
+			"name": "Ultrasoundsensor",
+			"path": "Ultrasoundsensor"
+		}
+	]
+}
