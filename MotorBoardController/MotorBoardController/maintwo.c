@@ -11,7 +11,7 @@
 #define number_of_motors 2
 
 struct Motors_t{
-	unsigned int pwm_value;
+	unsigned int pwm_value; //PWM ranges from 0-255;
 	int direction;
 	int state[2];
 };
@@ -56,8 +56,9 @@ void setup() {
 	DDRD |= (1<<DDD2)|(1<<DDD4); //Direction for motor 1
 	DDRB |= (1<<DDD0)|(1<<DDB4); //Direction for motor 2
 	
-	TCCR0A = (1<<WGM01)|(1<<WGM00);
-	TCCR0A|= ((1<<COM0A1) | (1<<COM0B1));
+	TCCR0A = (1<<WGM01)|(1<<WGM00); // specify fast PWM
+	TCCR0A|= ((1<<COM0A1) | (1<<COM0B1)); // add in non-inverting output
 	
-	TCCR0B = (1<<CS22);
+	TCCR0B = (1<<CS22); // prescale by 64x
+
 }
