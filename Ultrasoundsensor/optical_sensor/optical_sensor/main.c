@@ -2,7 +2,7 @@
  * Testing_2.c
  *
  * Created: 08/11/2021 20.02.14
- * Author : danie
+ * Author : danie *olie
  */ 
 
 #define F_CPU 16000000UL
@@ -13,10 +13,10 @@
 #include "usart.h"
 #include <avr/interrupt.h>
 
-void delay_us(unsigned char);
+void delay_us(unsigned int);
 void init_interrupt();
 volatile unsigned int us_counter;
-char sendsignal=1;
+volatile char sendsignal=1;
 volatile float distance=0;
 
 int main(void)
@@ -43,7 +43,7 @@ int main(void)
 	}
 }
 
-void delay_us(unsigned char us)
+void delay_us(unsigned int us)
 {
 	for(int i =0; i<us; i++){
 		// configure the timer to CTC mode
@@ -81,8 +81,10 @@ void init_interrupt(void){
 
 ISR (TIMER0_COMPA_vect) {
 	if (PINB & (1<<PINB0)) us_counter++;
-	if (~(PINB & (1<<PINB0)))
+	if (~(PINB & (1<<PINB0))){
 		distance = us_counter * 0.034 / 2;
 		sendsignal=1;
-		us_counter++;
+		us_counter=0;
+		distance=0;
 	}
+}
