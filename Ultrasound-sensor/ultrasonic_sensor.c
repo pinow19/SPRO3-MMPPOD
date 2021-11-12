@@ -29,12 +29,12 @@ int main(void)
 	/* Replace with your application code */
 	while (1)
 	{
-		init_getEcho();
 		PORTD &= (0<<PORTD2);
 		delay_us(2);
 		PORTD |= (1<<PORTD2);
 		delay_us(10);
 		PORTB &= (0<< PORTD2);
+		init_getEcho();
 		while (total_time == 0)
 		{
 			//wait until we not measured the HIGH state
