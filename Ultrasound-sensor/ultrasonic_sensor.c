@@ -16,33 +16,34 @@
 void delay_ms (unsigned int);
 void delay_us (unsigned int);
 void init_getEcho (void);
+void reset_prescaler(void);
+void disable_interrupt(void);
 
-volatile unsigned int us_counter=0, total_time=0;
+volatile unsigned long us_counter=0, total_time=0;
 
-int main(void)
-{
+int main(void){
+	
 	uart_init();
 	io_redirect();
 	DDRB &= ~(1<<DDB0); // Set PINB0 to input -> Echo
 	DDRD |= (1<<DDD2); // Set PIND2 to output -> Trigger
-	float distance;
+	unsigned int distance;
 	/* Replace with your application code */
 	while (1)
-	{
-		PORTD &= (0<<PORTD2);
+	{	
+		PORTD &= ~(1<<PORTD2);
 		delay_us(2);
 		PORTD |= (1<<PORTD2);
 		delay_us(10);
-		PORTB &= (0<< PORTD2);
+		PORTB &= ~(1<< PORTD2);
 		init_getEcho();
 		while (total_time == 0)
 		{
 			//wait until we not measured the HIGH state
 		}
-		cli();
-		distance = (total_time*0.034)/2;
+		distance = (total_time * 6) * 0.034 /2;
 		total_time = 0;
-		printf("Distance: %f\n", distance);
+		printf("Distance: %d\n", distance);
 		delay_ms(60);
 	}
 }
@@ -52,8 +53,7 @@ void delay_ms(unsigned int milliseconds){
 	// Set the value that you want to count to
 	OCR0A = 0xF9;
 	// start the timer
-	TCCR0B &= ~(1 << CS01);
-	TCCR0B &= ~(1 << CS00);
+	reset_prescaler();
 	//resetting pins
 	TCCR0B |= (1 << CS01) | (1 << CS00);// set pre-scaler to 64 and start the timer
 	for (int i=0; i<milliseconds; i++)
@@ -71,10 +71,8 @@ void delay_us(unsigned int microseconds){
 	// Set the value that you want to count to
 	OCR0A = 0x0F;
 	// start the timer
-	TCCR0B &= ~(1 << CS01);
-	TCCR0B &= ~(1 << CS00);
-	//resetting pins
-	TCCR0B |= (1 << CS00);// set prescaler to 1 and start the timer
+	reset_prescaler();
+	TCCR0B |= (1 << CS00);// set pre-scaler to 1 and start the timer
 	for (int i=0; i<microseconds; i++)
 	{
 		while ( (TIFR0 & (1 << OCF0A) ) == 0) // wait for the overflow event
@@ -88,13 +86,11 @@ void init_getEcho (void){
 	// Set the Timer Mode to CTC
 	TCCR0A |= (1 << WGM01);
 	// Set the value that you want to count to
-	OCR0A = 0x0F;// 0-15 (16 timer ticks)
+	OCR0A = 0x5F;// 0-159 (160 timer ticks)
 	//Start the timer
 	TIMSK0 |= (1 << OCIE0A); //Set the ISR COMPA vect
-	sei(); //enable interrupts
-	TCCR0B &= ~(1 << CS01);
-	TCCR0B &= ~(1 << CS00);
-	//resetting pins
+	sei(); //enable interrupts;
+	reset_prescaler(); //resetting pins
 	TCCR0B |= (1 << CS00);// set pre-scaler to 1 and start the timer
 }
 ISR (TIMER0_COMPA_vect) {
@@ -108,8 +104,13 @@ ISR (TIMER0_COMPA_vect) {
 		{
 			total_time = us_counter;
 			us_counter = 0;
-			cli();
+			disable_interrupt();
 		}
 	}
 }
-
+void reset_prescaler(void){
+	TCCR0B &= ~((1<<CS00) | (1<<CS01));
+}
+void disable_interrupt(void){
+	TCCR0B = 0;
+}
