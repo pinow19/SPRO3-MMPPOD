@@ -45,8 +45,8 @@ int main()
 		}
 		OCR0A = M[0].pwm_value;
 		OCR0B = M[1].pwm_value;
-		PORTD = 0;
-		PORTB = 0;
+		PORTD = 0; //THIS IS BAD
+		PORTB = 0; //FIX THIS
 		PORTD |= (((M[0].state[0]<<PORTD2) | (M[0].state[1]<<PORTD4)));
 		PORTB |= (((M[1].state[0]<<PORTB0) | (M[1].state[1]<<PORTB4)));
 			
