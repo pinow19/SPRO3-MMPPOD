@@ -20,7 +20,7 @@ void stopTimer(void);
 void start_count_slids (void);
 void reset_counted_slids(void);
 
-volatile unsigned long getTime = 0, pin_position, counted_slids=0;
+volatile unsigned long getTime = 0, counted_slids=0;
 
 
 int main(void)
@@ -47,7 +47,7 @@ int getRPM(void){
 	volatile unsigned long TimeHIGH, TimeLOW;
 	for (int i=0; i<2; i++)
 	{
-		pin_position=0;
+		unsigned int pin_position=0;
 		
 		if (PIND & (1<<DDD3)) //if the PIN is high
 		{
