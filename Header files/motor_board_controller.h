@@ -1,0 +1,6 @@
+#ifndef MOTOR_BOARD_CONTROLLER_H_INCLUDED
+#define MOTOR_BOARD_CONTROLLER_H_INCLUDED
+
+void setup(void);
+
+#endif
