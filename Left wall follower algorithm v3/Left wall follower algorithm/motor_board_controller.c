@@ -29,10 +29,9 @@ void motor_setup()
 			case BRAKE: M[i].state[0] = 0; M[i].state[1]= 0; break;
 		}*/
 	}
+	PORTB &= ~((1<<DDB0) | (1<<DDB1) | (1<<DDB2) | (1<<DDB3) | (1<<DDB4) | (1<<DDB5)); 
 	OCR1A = M[0].pwm_value;
 	OCR1B = M[1].pwm_value;
-	//PORTD = 0; //THIS IS BAD
-	//PORTB = 0; //FIX THIS
 	PORTB |= (((M[0].state[0]<<PORTB3) | (M[0].state[1]<<PORTB5)));
 	PORTB |= (((M[1].state[0]<<PORTB0) | (M[1].state[1]<<PORTB4)));
 	
