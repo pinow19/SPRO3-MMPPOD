@@ -43,10 +43,10 @@ int main()
 				case BRAKE: M[i].state[0] = 0; M[i].state[1]= 0; break;
 			}
 		}
-		OCR0A = M[0].pwm_value;
-		OCR0B = M[1].pwm_value;
 		PORTD &= ~((1<<PORTD2) | (1<<PORTD4)); //THIS IS BAD
 		PORTB &= ~((1<<PORTB0) | (1<<PORTB4)); //FIX THIS
+		OCR0A = M[0].pwm_value;
+		OCR0B = M[1].pwm_value;
 		PORTD |= (((M[0].state[0]<<PORTD2) | (M[0].state[1]<<PORTD4)));
 		PORTB |= (((M[1].state[0]<<PORTB0) | (M[1].state[1]<<PORTB4)));
 			
