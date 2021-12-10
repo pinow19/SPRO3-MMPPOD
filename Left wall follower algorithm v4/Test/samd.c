@@ -46,7 +46,7 @@ void select_motor_direction (unsigned char direction){
     PORTD &= ~(1 << IN2);
 
     PORTB |= (1 << IN3);
-    PORTB &= (1 << IN4);
+    PORTB &= ~(1 << IN4);
 
 		OCR0A = PWM; //ENB
 		OCR0B = PWM; //ENA
