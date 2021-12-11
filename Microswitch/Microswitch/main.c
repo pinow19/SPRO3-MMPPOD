@@ -5,7 +5,7 @@
 #include "usart.h"
 #include <avr/interrupt.h>
 
-#define PoM  6
+#define PoM  6 //Points of Measurement - how many holes the optowheel has
 
 volatile int count = 0, count_off = 0;
 double rpm = 0;
@@ -19,21 +19,21 @@ int main(void)
 	uart_init();
 	io_redirect();
 	
-	DDRD &= ~(1<<DDD3); //clear the pin PD2
-	DDRD |= 1<<DDD3;
+	DDRD &= ~(1<<DDD3); //clear the pin PD3
+	DDRD |= 1<<DDD3; //set this pin as input
 	
     while (1)
     {
-		if (PIND & 1<<PIND3)
+		if (PIND & 1<<PIND3) //initial contact, but has to wait for the ripple effect
 		{
-			if(PIND & 1<<PIND3)
+			if(PIND & 1<<PIND3) //check again
 			{
-				while(PIND & 1<<PIND3)
+				while(PIND & 1<<PIND3) //start counting the time
 				{
-					_delay_ms(1);
+					_delay_ms(1); //so that everything is a bit slowed down, otherwise it overflows
 					count++;
 				}		
-				rpm = 600000/(((double)count+(double)count_off)*PoM);
+				rpm = 600000/(((double)count+(double)count_off)*PoM); //calculate the rpm - needs adjustment as the time does not acccount for the code load
 	
 				slids++;
 				count_off=0;
