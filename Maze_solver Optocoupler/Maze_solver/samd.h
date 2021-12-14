@@ -2,8 +2,8 @@
 #define SAMD_H
 
 //Enumeration
-enum Motor {ENA = 5, //D5 -> Left motor
-            ENB = 6, //D6 -> Right motor
+enum Motor {ENA = 6, //D6 -> Left motor
+            ENB = 5, //D5 -> Right motor
             IN1 = 4, //D4 -> Left motor
             IN2 = 7, //D7 -> Left motor
             IN3 = 0, //D8 -> Right motor

@@ -37,8 +37,8 @@ int main(void)
 	
     while (1) 
     {
-		int PWMR = 100;
-		int PWML = 100;
+		int PWMR = 60;
+		int PWML = 60;
 		FrontSensor = ultrasound_sensor(U_FRONT);
 		RightSensor = ultrasound_sensor(U_RIGHT);
 		LeftSensor = ultrasound_sensor(U_LEFT);
@@ -161,32 +161,32 @@ int main(void)
 		else
 		{
 			printf("Everything is ok!\n");
-			select_motor_direction(FORWARD, PWML, PWMR);
+			select_motor_direction(FORWARD, PWMR, PWML);
 			if (RightSensor>LeftSensor){
 				while(RightSensor>LeftSensor){
-				correcting = RightSensor-LeftSensor;
-				PWML = PWML;
+				//correcting = RightSensor-LeftSensor;
+				PWML = PWML+1;
 				if (PWML>240) PWML = 250;
-				select_motor_direction(FORWARD, PWML, PWMR);
+				select_motor_direction(FORWARD, PWMR, PWML);
 				printf("Increasing left motor %d\n", PWML);
 				RightSensor = ultrasound_sensor(U_RIGHT);
 				LeftSensor = ultrasound_sensor(U_LEFT);
 				}
-				PWML = 100;
-				PWMR = 100;
+				PWML = 50;
+				PWMR = 50;
 			}
 			else if (LeftSensor>RightSensor){
 				while (LeftSensor>RightSensor){
-				correcting = LeftSensor-RightSensor;
-				PWMR = PWMR+correcting;
+				//correcting = LeftSensor-RightSensor;
+				PWMR = PWMR+1;
 				if (PWMR>240) PWMR = 250;
-				select_motor_direction(FORWARD, PWML, PWMR);
+				select_motor_direction(FORWARD, PWMR, PWML);
 				printf("Increasing right motor %d\n", PWMR);
 				RightSensor = ultrasound_sensor(U_RIGHT);
 				LeftSensor = ultrasound_sensor(U_LEFT);
 				}
-				PWML = 100;
-				PWMR = 100;
+				PWML = 50;
+				PWMR = 50;
 			}
 		}
 	}
