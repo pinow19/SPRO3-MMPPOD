@@ -93,7 +93,7 @@ void show_values()
 	if(x==1) x=2;
 	if(x==0){
 	//	printf("The total travel time is %ld ms\n",travel_time);
-		//printf("The number of slids detected is %d \n",nr_slids);
+		printf("The number of slids detected is %d \n",nr_slids);
 		//printf("timer between slids is %ld and t is %ld \n",timer_between_two_slids,t);
 		//	printf("The value that is stored in timer value holder is %ld \n",timer_value_holder);
 		// printf("Distance traveled in cm is %d and the average nr of slids/min is %0.2f\n",distance,(float)avg_slids_per_min);

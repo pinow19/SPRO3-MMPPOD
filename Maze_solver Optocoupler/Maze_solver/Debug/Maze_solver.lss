@@ -19,15 +19,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 00000a7d  00000000  00000000  00002619  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000aa1  00000000  00000000  00003096  2**0
+  8 .debug_line   00000aa0  00000000  00000000  00003096  2**0
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  0000020c  00000000  00000000  00003b38  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000068d  00000000  00000000  00003d44  2**0
+ 10 .debug_str    000006cb  00000000  00000000  00003d44  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000061c  00000000  00000000  000043d1  2**0
+ 11 .debug_loc    0000061c  00000000  00000000  0000440f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000a0  00000000  00000000  000049ed  2**0
+ 12 .debug_ranges 000000a0  00000000  00000000  00004a2b  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -155,6 +155,7 @@ int main(void)
       f2:	9f 93       	push	r25
       f4:	8f 93       	push	r24
       f6:	0e 94 00 06 	call	0xc00	; 0xc00 <printf>
+		
 		
 		//There are seven cases our robot can come into contact with a obstacle and needs to avoid it
 		
@@ -362,11 +363,11 @@ int main(void)
      24c:	00 c0       	rjmp	.+0      	; 0x24e <main+0x1a8>
      24e:	00 00       	nop
      250:	30 cf       	rjmp	.-416    	; 0xb2 <main+0xc>
-			_delay_ms(_10_degrees);
 			select_motor_direction(FORWARD);
 		}
 		*/
 		//Case 5: When the front and left is blocked
+		
 		else if (FrontSensor < (DIS_F+20) && RightSensor > DIS && LeftSensor < DIS)
      252:	c2 33       	cpi	r28, 0x32	; 50
      254:	d1 05       	cpc	r29, r1
@@ -406,10 +407,10 @@ int main(void)
      290:	8b e7       	ldi	r24, 0x7B	; 123
      292:	91 e0       	ldi	r25, 0x01	; 1
      294:	0e 94 16 06 	call	0xc2c	; 0xc2c <puts>
-			opto_turn(5, OP_LEFT);
+			opto_turn(4, OP_LEFT);
      298:	62 e0       	ldi	r22, 0x02	; 2
      29a:	70 e0       	ldi	r23, 0x00	; 0
-     29c:	85 e0       	ldi	r24, 0x05	; 5
+     29c:	84 e0       	ldi	r24, 0x04	; 4
      29e:	90 e0       	ldi	r25, 0x00	; 0
      2a0:	0e 94 95 01 	call	0x32a	; 0x32a <opto_turn>
 			printf("lol2\n");
@@ -462,10 +463,10 @@ int main(void)
      2f2:	8b e7       	ldi	r24, 0x7B	; 123
      2f4:	91 e0       	ldi	r25, 0x01	; 1
      2f6:	0e 94 16 06 	call	0xc2c	; 0xc2c <puts>
-			opto_turn(5, OP_RIGHT);
+			opto_turn(4, OP_RIGHT);
      2fa:	63 e0       	ldi	r22, 0x03	; 3
      2fc:	70 e0       	ldi	r23, 0x00	; 0
-     2fe:	85 e0       	ldi	r24, 0x05	; 5
+     2fe:	84 e0       	ldi	r24, 0x04	; 4
      300:	90 e0       	ldi	r25, 0x00	; 0
      302:	0e 94 95 01 	call	0x32a	; 0x32a <opto_turn>
 			printf("lol2\n");
@@ -493,12 +494,6 @@ int main(void)
      328:	c4 ce       	rjmp	.-632    	; 0xb2 <main+0xc>
 
 0000032a <opto_turn>:
-int slids = 0;
-
-
-
-int opto_turn(int turns, int side)
-{
      32a:	cf 92       	push	r12
      32c:	df 92       	push	r13
      32e:	ef 92       	push	r14
@@ -508,20 +503,9 @@ int opto_turn(int turns, int side)
      336:	df 93       	push	r29
      338:	ec 01       	movw	r28, r24
      33a:	16 2f       	mov	r17, r22
-	
-	slids = 0;	
      33c:	10 92 a5 01 	sts	0x01A5, r1	; 0x8001a5 <__data_end+0x1>
      340:	10 92 a4 01 	sts	0x01A4, r1	; 0x8001a4 <__data_end>
-	//DDRD &= ~(1<<DDD3); //clear the pin PD2
-	//DDRD |= 1<<DDD3;
-	
-	 
-	
-    while (slids<turns)
      344:	80 c0       	rjmp	.+256    	; 0x446 <__EEPROM_REGION_LENGTH__+0x46>
-    {
-		
-		if (PIND & 1<<side)
      346:	89 b1       	in	r24, 0x09	; 9
      348:	90 e0       	ldi	r25, 0x00	; 0
      34a:	01 2e       	mov	r0, r17
@@ -532,9 +516,6 @@ int opto_turn(int turns, int side)
      354:	e2 f7       	brpl	.-8      	; 0x34e <opto_turn+0x24>
      356:	80 ff       	sbrs	r24, 0
      358:	63 c0       	rjmp	.+198    	; 0x420 <__EEPROM_REGION_LENGTH__+0x20>
-		{
-			
-			if(PIND & 1<<side)
      35a:	89 b1       	in	r24, 0x09	; 9
      35c:	90 e0       	ldi	r25, 0x00	; 0
      35e:	01 2e       	mov	r0, r17
@@ -552,22 +533,11 @@ int opto_turn(int turns, int side)
      376:	f1 f7       	brne	.-4      	; 0x374 <opto_turn+0x4a>
      378:	00 c0       	rjmp	.+0      	; 0x37a <opto_turn+0x50>
      37a:	00 00       	nop
-			{
-				while(PIND & 1<<side)
-				{
-					_delay_ms(1);
-					count_opto++;
      37c:	80 91 ac 01 	lds	r24, 0x01AC	; 0x8001ac <count_opto>
      380:	90 91 ad 01 	lds	r25, 0x01AD	; 0x8001ad <count_opto+0x1>
      384:	01 96       	adiw	r24, 0x01	; 1
      386:	90 93 ad 01 	sts	0x01AD, r25	; 0x8001ad <count_opto+0x1>
      38a:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <count_opto>
-		if (PIND & 1<<side)
-		{
-			
-			if(PIND & 1<<side)
-			{
-				while(PIND & 1<<side)
      38e:	89 b1       	in	r24, 0x09	; 9
      390:	90 e0       	ldi	r25, 0x00	; 0
      392:	01 2e       	mov	r0, r17
@@ -578,11 +548,6 @@ int opto_turn(int turns, int side)
      39c:	e2 f7       	brpl	.-8      	; 0x396 <opto_turn+0x6c>
      39e:	80 fd       	sbrc	r24, 0
      3a0:	e7 cf       	rjmp	.-50     	; 0x370 <opto_turn+0x46>
-				{
-					_delay_ms(1);
-					count_opto++;
-				}		
-				rpm = 600000/(((double)count_opto+(double)count_off)*PoM);
      3a2:	60 91 ac 01 	lds	r22, 0x01AC	; 0x8001ac <count_opto>
      3a6:	70 91 ad 01 	lds	r23, 0x01AD	; 0x8001ad <count_opto+0x1>
      3aa:	07 2e       	mov	r0, r23
@@ -620,14 +585,11 @@ int opto_turn(int turns, int side)
      3fa:	70 93 a7 01 	sts	0x01A7, r23	; 0x8001a7 <rpm+0x1>
      3fe:	80 93 a8 01 	sts	0x01A8, r24	; 0x8001a8 <rpm+0x2>
      402:	90 93 a9 01 	sts	0x01A9, r25	; 0x8001a9 <rpm+0x3>
-	
-				slids++;
      406:	80 91 a4 01 	lds	r24, 0x01A4	; 0x8001a4 <__data_end>
      40a:	90 91 a5 01 	lds	r25, 0x01A5	; 0x8001a5 <__data_end+0x1>
      40e:	01 96       	adiw	r24, 0x01	; 1
      410:	90 93 a5 01 	sts	0x01A5, r25	; 0x8001a5 <__data_end+0x1>
      414:	80 93 a4 01 	sts	0x01A4, r24	; 0x8001a4 <__data_end>
-				count_off=0;
      418:	10 92 ab 01 	sts	0x01AB, r1	; 0x8001ab <count_off+0x1>
      41c:	10 92 aa 01 	sts	0x01AA, r1	; 0x8001aa <count_off>
      420:	8f e9       	ldi	r24, 0x9F	; 159
@@ -636,37 +598,19 @@ int opto_turn(int turns, int side)
      426:	f1 f7       	brne	.-4      	; 0x424 <__EEPROM_REGION_LENGTH__+0x24>
      428:	00 c0       	rjmp	.+0      	; 0x42a <__EEPROM_REGION_LENGTH__+0x2a>
      42a:	00 00       	nop
-					
-				
-			}
-		}
-		_delay_ms(1);
-		count_off++;
      42c:	80 91 aa 01 	lds	r24, 0x01AA	; 0x8001aa <count_off>
      430:	90 91 ab 01 	lds	r25, 0x01AB	; 0x8001ab <count_off+0x1>
      434:	01 96       	adiw	r24, 0x01	; 1
      436:	90 93 ab 01 	sts	0x01AB, r25	; 0x8001ab <count_off+0x1>
      43a:	80 93 aa 01 	sts	0x01AA, r24	; 0x8001aa <count_off>
-		count_opto = 0;
      43e:	10 92 ad 01 	sts	0x01AD, r1	; 0x8001ad <count_opto+0x1>
      442:	10 92 ac 01 	sts	0x01AC, r1	; 0x8001ac <count_opto>
-	//DDRD &= ~(1<<DDD3); //clear the pin PD2
-	//DDRD |= 1<<DDD3;
-	
-	 
-	
-    while (slids<turns)
      446:	80 91 a4 01 	lds	r24, 0x01A4	; 0x8001a4 <__data_end>
      44a:	90 91 a5 01 	lds	r25, 0x01A5	; 0x8001a5 <__data_end+0x1>
      44e:	8c 17       	cp	r24, r28
      450:	9d 07       	cpc	r25, r29
      452:	0c f4       	brge	.+2      	; 0x456 <__EEPROM_REGION_LENGTH__+0x56>
      454:	78 cf       	rjmp	.-272    	; 0x346 <opto_turn+0x1c>
-		count_off++;
-		count_opto = 0;
-
-	}
-
      456:	df 91       	pop	r29
      458:	cf 91       	pop	r28
      45a:	1f 91       	pop	r17
@@ -677,39 +621,23 @@ int opto_turn(int turns, int side)
      464:	08 95       	ret
 
 00000466 <setup_motors>:
-    break;
-  }
-}
-
-void setup_motors (void){
-  TCCR0A |= (1 << WGM00) | (1 << WGM00); //Enable Fast PWM mode on Timer0
      466:	84 b5       	in	r24, 0x24	; 36
      468:	81 60       	ori	r24, 0x01	; 1
      46a:	84 bd       	out	0x24, r24	; 36
-  TCCR0A |= (1 << COM0A1) | (1 << COM0B1); //Enable to put out PWM signal to D5 and D6 pins
      46c:	84 b5       	in	r24, 0x24	; 36
      46e:	80 6a       	ori	r24, 0xA0	; 160
      470:	84 bd       	out	0x24, r24	; 36
-  TCCR0B |= (1 << CS00) | (1 << CS01); //Set pre-scaler to 64
      472:	85 b5       	in	r24, 0x25	; 37
      474:	83 60       	ori	r24, 0x03	; 3
      476:	85 bd       	out	0x25, r24	; 37
      478:	08 95       	ret
 
 0000047a <select_motor_direction>:
-  distance = duration * 0.34 / 2; // 340m/s -> 0.34 cm/10us because we measure distance every 10 microseconds
-  delay_ms(60); //Suggested by datasheet to wait 60ms to ultrasound signal interruption
-  return distance;
-}
-
-void select_motor_direction (unsigned char direction, unsigned char PWM){
      47a:	cf 93       	push	r28
      47c:	df 93       	push	r29
      47e:	c8 2f       	mov	r28, r24
      480:	d6 2f       	mov	r29, r22
-  setup_motors();
      482:	0e 94 33 02 	call	0x466	; 0x466 <setup_motors>
-  switch (direction)
      486:	c2 30       	cpi	r28, 0x02	; 2
      488:	49 f1       	breq	.+82     	; 0x4dc <select_motor_direction+0x62>
      48a:	28 f4       	brcc	.+10     	; 0x496 <select_motor_direction+0x1c>
@@ -723,187 +651,107 @@ void select_motor_direction (unsigned char direction, unsigned char PWM){
      49a:	c4 30       	cpi	r28, 0x04	; 4
      49c:	e9 f1       	breq	.+122    	; 0x518 <select_motor_direction+0x9e>
      49e:	4a c0       	rjmp	.+148    	; 0x534 <select_motor_direction+0xba>
-  {
-  case FORWARD:
-    PORTD |= (1 << IN1);
      4a0:	8b b1       	in	r24, 0x0b	; 11
      4a2:	80 61       	ori	r24, 0x10	; 16
      4a4:	8b b9       	out	0x0b, r24	; 11
-    PORTD &= ~(1 << IN2);
      4a6:	8b b1       	in	r24, 0x0b	; 11
      4a8:	8f 77       	andi	r24, 0x7F	; 127
      4aa:	8b b9       	out	0x0b, r24	; 11
-
-    PORTB |= (1 << IN3);
      4ac:	85 b1       	in	r24, 0x05	; 5
      4ae:	81 60       	ori	r24, 0x01	; 1
      4b0:	85 b9       	out	0x05, r24	; 5
-    PORTB &= ~(1 << IN4);
      4b2:	85 b1       	in	r24, 0x05	; 5
      4b4:	8d 7f       	andi	r24, 0xFD	; 253
      4b6:	85 b9       	out	0x05, r24	; 5
-
-		OCR0A = PWM; //ENB
      4b8:	d7 bd       	out	0x27, r29	; 39
-		OCR0B = PWM; //ENA
      4ba:	d8 bd       	out	0x28, r29	; 40
-
-    break;
      4bc:	3b c0       	rjmp	.+118    	; 0x534 <select_motor_direction+0xba>
-
-  case BACKWARD:
-    PORTD &= ~(1 << IN1);
      4be:	8b b1       	in	r24, 0x0b	; 11
      4c0:	8f 7e       	andi	r24, 0xEF	; 239
      4c2:	8b b9       	out	0x0b, r24	; 11
-    PORTD |= (1 << IN2);
      4c4:	8b b1       	in	r24, 0x0b	; 11
      4c6:	80 68       	ori	r24, 0x80	; 128
      4c8:	8b b9       	out	0x0b, r24	; 11
-
-    PORTB &= ~(1 << IN3);
      4ca:	85 b1       	in	r24, 0x05	; 5
      4cc:	8e 7f       	andi	r24, 0xFE	; 254
      4ce:	85 b9       	out	0x05, r24	; 5
-    PORTB |= (1 << IN4);
      4d0:	85 b1       	in	r24, 0x05	; 5
      4d2:	82 60       	ori	r24, 0x02	; 2
      4d4:	85 b9       	out	0x05, r24	; 5
-
-	OCR0A = PWM; //ENB
      4d6:	d7 bd       	out	0x27, r29	; 39
-	OCR0B = PWM; //ENA
      4d8:	d8 bd       	out	0x28, r29	; 40
-
-    break;
      4da:	2c c0       	rjmp	.+88     	; 0x534 <select_motor_direction+0xba>
-  
-  case LEFT:
-    //Left goes backward
-    PORTD &= ~(1 << IN1);
      4dc:	8b b1       	in	r24, 0x0b	; 11
      4de:	8f 7e       	andi	r24, 0xEF	; 239
      4e0:	8b b9       	out	0x0b, r24	; 11
-    PORTD |= (1 << IN2);
      4e2:	8b b1       	in	r24, 0x0b	; 11
      4e4:	80 68       	ori	r24, 0x80	; 128
      4e6:	8b b9       	out	0x0b, r24	; 11
-
-    //Right goes forward
-    PORTB |= (1 << IN3);
      4e8:	85 b1       	in	r24, 0x05	; 5
      4ea:	81 60       	ori	r24, 0x01	; 1
      4ec:	85 b9       	out	0x05, r24	; 5
-    PORTB &= ~(1 << IN4);
      4ee:	85 b1       	in	r24, 0x05	; 5
      4f0:	8d 7f       	andi	r24, 0xFD	; 253
      4f2:	85 b9       	out	0x05, r24	; 5
-
-	OCR0A = PWM; //ENB
      4f4:	d7 bd       	out	0x27, r29	; 39
-	OCR0B = PWM; //ENA
      4f6:	d8 bd       	out	0x28, r29	; 40
-
-    break;
      4f8:	1d c0       	rjmp	.+58     	; 0x534 <select_motor_direction+0xba>
-  
-  case RIGHT:
-    //Left goes forward
-    PORTD |= (1 << IN1);
      4fa:	8b b1       	in	r24, 0x0b	; 11
      4fc:	80 61       	ori	r24, 0x10	; 16
      4fe:	8b b9       	out	0x0b, r24	; 11
-    PORTD &= ~(1 << IN2);
      500:	8b b1       	in	r24, 0x0b	; 11
      502:	8f 77       	andi	r24, 0x7F	; 127
      504:	8b b9       	out	0x0b, r24	; 11
-
-    //Right goes backward
-    PORTB &= ~(1 << IN3);
      506:	85 b1       	in	r24, 0x05	; 5
      508:	8e 7f       	andi	r24, 0xFE	; 254
      50a:	85 b9       	out	0x05, r24	; 5
-    PORTB |= (1 << IN4);
      50c:	85 b1       	in	r24, 0x05	; 5
      50e:	82 60       	ori	r24, 0x02	; 2
      510:	85 b9       	out	0x05, r24	; 5
-
-	OCR0A = PWM; //ENB
      512:	d7 bd       	out	0x27, r29	; 39
-	OCR0B = PWM; //ENA
      514:	d8 bd       	out	0x28, r29	; 40
-
-  break;
      516:	0e c0       	rjmp	.+28     	; 0x534 <select_motor_direction+0xba>
-  
-  case STOP:
-    PORTD &= ~(1 << IN1);
      518:	8b b1       	in	r24, 0x0b	; 11
      51a:	8f 7e       	andi	r24, 0xEF	; 239
      51c:	8b b9       	out	0x0b, r24	; 11
-    PORTD &= ~(1 << IN2);
      51e:	8b b1       	in	r24, 0x0b	; 11
      520:	8f 77       	andi	r24, 0x7F	; 127
      522:	8b b9       	out	0x0b, r24	; 11
-
-    PORTB &= ~(1 << IN3);
      524:	85 b1       	in	r24, 0x05	; 5
      526:	8e 7f       	andi	r24, 0xFE	; 254
      528:	85 b9       	out	0x05, r24	; 5
-    PORTB &= ~(1 << IN4);
      52a:	85 b1       	in	r24, 0x05	; 5
      52c:	8d 7f       	andi	r24, 0xFD	; 253
      52e:	85 b9       	out	0x05, r24	; 5
-
-    OCR0A = 0; //ENB
      530:	17 bc       	out	0x27, r1	; 39
-    OCR0B = 0; //ENA
      532:	18 bc       	out	0x28, r1	; 40
-
-    break;
-  }
-}
      534:	df 91       	pop	r29
      536:	cf 91       	pop	r28
      538:	08 95       	ret
 
 0000053a <start_timer>:
-    TIFR2 |= (1 << OCF2A);
-  }
-}
-
-void start_timer (void){
-	TCCR1A = 0;
      53a:	10 92 80 00 	sts	0x0080, r1	; 0x800080 <__TEXT_REGION_LENGTH__+0x7f8080>
-	TCCR1B |= (1 << WGM12); // Set the Timer1 Mode to CTC
      53e:	e1 e8       	ldi	r30, 0x81	; 129
      540:	f0 e0       	ldi	r31, 0x00	; 0
      542:	80 81       	ld	r24, Z
      544:	88 60       	ori	r24, 0x08	; 8
      546:	80 83       	st	Z, r24
-	OCR1A = 0x9F; //160 tick (0-159) to reach 10us
      548:	8f e9       	ldi	r24, 0x9F	; 159
      54a:	90 e0       	ldi	r25, 0x00	; 0
      54c:	90 93 89 00 	sts	0x0089, r25	; 0x800089 <__TEXT_REGION_LENGTH__+0x7f8089>
      550:	80 93 88 00 	sts	0x0088, r24	; 0x800088 <__TEXT_REGION_LENGTH__+0x7f8088>
-	TIMSK1 |= (1 << OCIE1A); //Set the ISR COMPA vect
      554:	af e6       	ldi	r26, 0x6F	; 111
      556:	b0 e0       	ldi	r27, 0x00	; 0
      558:	8c 91       	ld	r24, X
      55a:	82 60       	ori	r24, 0x02	; 2
      55c:	8c 93       	st	X, r24
-	sei();
      55e:	78 94       	sei
-	TCCR1B |= (1 << CS10); // set pre-scaler to 1 to reach us
      560:	80 81       	ld	r24, Z
      562:	81 60       	ori	r24, 0x01	; 1
      564:	80 83       	st	Z, r24
      566:	08 95       	ret
 
 00000568 <__vector_11>:
-}
-
-ISR (TIMER1_COMPA_vect){
      568:	1f 92       	push	r1
      56a:	0f 92       	push	r0
      56c:	0f b6       	in	r0, 0x3f	; 63
@@ -912,13 +760,11 @@ ISR (TIMER1_COMPA_vect){
      572:	2f 93       	push	r18
      574:	8f 93       	push	r24
      576:	9f 93       	push	r25
-  ten_us_counter++;
      578:	80 91 ae 01 	lds	r24, 0x01AE	; 0x8001ae <ten_us_counter>
      57c:	90 91 af 01 	lds	r25, 0x01AF	; 0x8001af <ten_us_counter+0x1>
      580:	01 96       	adiw	r24, 0x01	; 1
      582:	90 93 af 01 	sts	0x01AF, r25	; 0x8001af <ten_us_counter+0x1>
      586:	80 93 ae 01 	sts	0x01AE, r24	; 0x8001ae <ten_us_counter>
-  if(ten_us_counter>65000) ten_us_counter = 0; //to avoid overflow of int
      58a:	80 91 ae 01 	lds	r24, 0x01AE	; 0x8001ae <ten_us_counter>
      58e:	90 91 af 01 	lds	r25, 0x01AF	; 0x8001af <ten_us_counter+0x1>
      592:	89 3e       	cpi	r24, 0xE9	; 233
@@ -926,7 +772,6 @@ ISR (TIMER1_COMPA_vect){
      596:	20 f0       	brcs	.+8      	; 0x5a0 <__vector_11+0x38>
      598:	10 92 af 01 	sts	0x01AF, r1	; 0x8001af <ten_us_counter+0x1>
      59c:	10 92 ae 01 	sts	0x01AE, r1	; 0x8001ae <ten_us_counter>
-}
      5a0:	9f 91       	pop	r25
      5a2:	8f 91       	pop	r24
      5a4:	2f 91       	pop	r18
@@ -937,17 +782,10 @@ ISR (TIMER1_COMPA_vect){
      5ae:	18 95       	reti
 
 000005b0 <stop_timer>:
-
-void stop_timer (void){
-  TCCR1B = 0; //stop interrupt
      5b0:	10 92 81 00 	sts	0x0081, r1	; 0x800081 <__TEXT_REGION_LENGTH__+0x7f8081>
      5b4:	08 95       	ret
 
 000005b6 <reset_prescaler>:
-}
-
-void reset_prescaler(void){
-  TCCR2B &= ~((1 << CS20) | (1 << CS22));
      5b6:	e1 eb       	ldi	r30, 0xB1	; 177
      5b8:	f0 e0       	ldi	r31, 0x00	; 0
      5ba:	80 81       	ld	r24, Z
@@ -956,122 +794,74 @@ void reset_prescaler(void){
      5c0:	08 95       	ret
 
 000005c2 <delay_ms>:
-  TCCR0A |= (1 << WGM00) | (1 << WGM00); //Enable Fast PWM mode on Timer0
-  TCCR0A |= (1 << COM0A1) | (1 << COM0B1); //Enable to put out PWM signal to D5 and D6 pins
-  TCCR0B |= (1 << CS00) | (1 << CS01); //Set pre-scaler to 64
-}
-
-void delay_ms (unsigned int ms){
      5c2:	cf 93       	push	r28
      5c4:	df 93       	push	r29
      5c6:	ec 01       	movw	r28, r24
-  TCCR2A |= (1 << WGM21); // Set the Timer2 Mode to CTC
      5c8:	e0 eb       	ldi	r30, 0xB0	; 176
      5ca:	f0 e0       	ldi	r31, 0x00	; 0
      5cc:	80 81       	ld	r24, Z
      5ce:	82 60       	ori	r24, 0x02	; 2
      5d0:	80 83       	st	Z, r24
-  OCR2A = 0xF9; // count up to 256 ticks (0-255) to reach 1ms
      5d2:	89 ef       	ldi	r24, 0xF9	; 249
      5d4:	80 93 b3 00 	sts	0x00B3, r24	; 0x8000b3 <__TEXT_REGION_LENGTH__+0x7f80b3>
-  reset_prescaler();
      5d8:	0e 94 db 02 	call	0x5b6	; 0x5b6 <reset_prescaler>
-  TCCR2B |= (1 << CS22); // set pre-scaler to 64 and start the timer
      5dc:	e1 eb       	ldi	r30, 0xB1	; 177
      5de:	f0 e0       	ldi	r31, 0x00	; 0
      5e0:	80 81       	ld	r24, Z
      5e2:	84 60       	ori	r24, 0x04	; 4
      5e4:	80 83       	st	Z, r24
-  for (int i=0; i < ms; i++){
      5e6:	20 e0       	ldi	r18, 0x00	; 0
      5e8:	30 e0       	ldi	r19, 0x00	; 0
      5ea:	07 c0       	rjmp	.+14     	; 0x5fa <delay_ms+0x38>
-    while (!(TIFR2 & (1 << OCF2A))); // wait for the overflow event
      5ec:	b9 9b       	sbis	0x17, 1	; 23
      5ee:	fe cf       	rjmp	.-4      	; 0x5ec <delay_ms+0x2a>
-    TIFR2 |= (1 << OCF2A);
      5f0:	87 b3       	in	r24, 0x17	; 23
      5f2:	82 60       	ori	r24, 0x02	; 2
      5f4:	87 bb       	out	0x17, r24	; 23
-void delay_ms (unsigned int ms){
-  TCCR2A |= (1 << WGM21); // Set the Timer2 Mode to CTC
-  OCR2A = 0xF9; // count up to 256 ticks (0-255) to reach 1ms
-  reset_prescaler();
-  TCCR2B |= (1 << CS22); // set pre-scaler to 64 and start the timer
-  for (int i=0; i < ms; i++){
      5f6:	2f 5f       	subi	r18, 0xFF	; 255
      5f8:	3f 4f       	sbci	r19, 0xFF	; 255
      5fa:	2c 17       	cp	r18, r28
      5fc:	3d 07       	cpc	r19, r29
      5fe:	b0 f3       	brcs	.-20     	; 0x5ec <delay_ms+0x2a>
-    while (!(TIFR2 & (1 << OCF2A))); // wait for the overflow event
-    TIFR2 |= (1 << OCF2A);
-  }
-}
      600:	df 91       	pop	r29
      602:	cf 91       	pop	r28
      604:	08 95       	ret
 
 00000606 <delay_us>:
-
-void delay_us (unsigned int us){
      606:	cf 93       	push	r28
      608:	df 93       	push	r29
      60a:	ec 01       	movw	r28, r24
-  TCCR2A |= (1 << WGM21); // Set the Timer2 Mode to CTC
      60c:	e0 eb       	ldi	r30, 0xB0	; 176
      60e:	f0 e0       	ldi	r31, 0x00	; 0
      610:	80 81       	ld	r24, Z
      612:	82 60       	ori	r24, 0x02	; 2
      614:	80 83       	st	Z, r24
-  OCR2A = 0x0F; // count up to 16 ticks (0-15) to reach 1us
      616:	8f e0       	ldi	r24, 0x0F	; 15
      618:	80 93 b3 00 	sts	0x00B3, r24	; 0x8000b3 <__TEXT_REGION_LENGTH__+0x7f80b3>
-  reset_prescaler();
      61c:	0e 94 db 02 	call	0x5b6	; 0x5b6 <reset_prescaler>
-  TCCR2B |= (1 << CS20); // set pre-scaler to 1 and start the timer
      620:	e1 eb       	ldi	r30, 0xB1	; 177
      622:	f0 e0       	ldi	r31, 0x00	; 0
      624:	80 81       	ld	r24, Z
      626:	81 60       	ori	r24, 0x01	; 1
      628:	80 83       	st	Z, r24
-  for (int i=0; i < us; i++){
      62a:	20 e0       	ldi	r18, 0x00	; 0
      62c:	30 e0       	ldi	r19, 0x00	; 0
      62e:	07 c0       	rjmp	.+14     	; 0x63e <delay_us+0x38>
-    while (!(TIFR2 & (1 << OCF2A))); // wait for the overflow event
      630:	b9 9b       	sbis	0x17, 1	; 23
      632:	fe cf       	rjmp	.-4      	; 0x630 <delay_us+0x2a>
-    TIFR2 |= (1 << OCF2A);
      634:	87 b3       	in	r24, 0x17	; 23
      636:	82 60       	ori	r24, 0x02	; 2
      638:	87 bb       	out	0x17, r24	; 23
-void delay_us (unsigned int us){
-  TCCR2A |= (1 << WGM21); // Set the Timer2 Mode to CTC
-  OCR2A = 0x0F; // count up to 16 ticks (0-15) to reach 1us
-  reset_prescaler();
-  TCCR2B |= (1 << CS20); // set pre-scaler to 1 and start the timer
-  for (int i=0; i < us; i++){
      63a:	2f 5f       	subi	r18, 0xFF	; 255
      63c:	3f 4f       	sbci	r19, 0xFF	; 255
      63e:	2c 17       	cp	r18, r28
      640:	3d 07       	cpc	r19, r29
      642:	b0 f3       	brcs	.-20     	; 0x630 <delay_us+0x2a>
-    while (!(TIFR2 & (1 << OCF2A))); // wait for the overflow event
-    TIFR2 |= (1 << OCF2A);
-  }
-}
      644:	df 91       	pop	r29
      646:	cf 91       	pop	r28
      648:	08 95       	ret
 
 0000064a <ultrasound_sensor>:
-void setup_motors (void);
-void reset_prescaler(void);
-
-volatile unsigned int ten_us_counter = 0;
-
-unsigned int ultrasound_sensor (unsigned char sensor){
      64a:	cf 92       	push	r12
      64c:	df 92       	push	r13
      64e:	ef 92       	push	r14
@@ -1081,14 +871,9 @@ unsigned int ultrasound_sensor (unsigned char sensor){
      656:	cf 93       	push	r28
      658:	df 93       	push	r29
      65a:	18 2f       	mov	r17, r24
-  unsigned char Echo_Pin = sensor;
-  unsigned char Trigger_Pin = sensor+2;
      65c:	02 e0       	ldi	r16, 0x02	; 2
      65e:	08 0f       	add	r16, r24
-  unsigned int distance = 0, duration = 0, timer_LOW = 0, timer_HIGH = 0;
-  start_timer();
      660:	0e 94 9d 02 	call	0x53a	; 0x53a <start_timer>
-  PORTB &= ~(1 << Trigger_Pin); // wait 2us to make sure echo is avoided
      664:	85 b1       	in	r24, 0x05	; 5
      666:	c1 e0       	ldi	r28, 0x01	; 1
      668:	d0 e0       	ldi	r29, 0x00	; 0
@@ -1101,46 +886,23 @@ unsigned int ultrasound_sensor (unsigned char sensor){
      676:	d0 95       	com	r29
      678:	8d 23       	and	r24, r29
      67a:	85 b9       	out	0x05, r24	; 5
-  delay_us(2);
      67c:	82 e0       	ldi	r24, 0x02	; 2
      67e:	90 e0       	ldi	r25, 0x00	; 0
      680:	0e 94 03 03 	call	0x606	; 0x606 <delay_us>
-  PORTB |= (1 << Trigger_Pin); // Activate trigger pin to send out ultrasound noise for 10 us
      684:	85 b1       	in	r24, 0x05	; 5
      686:	c8 2b       	or	r28, r24
      688:	c5 b9       	out	0x05, r28	; 5
-  delay_us(10);
      68a:	8a e0       	ldi	r24, 0x0A	; 10
      68c:	90 e0       	ldi	r25, 0x00	; 0
      68e:	0e 94 03 03 	call	0x606	; 0x606 <delay_us>
-  PORTB &= ~(1 << Trigger_Pin); //turn off the trigger
      692:	85 b1       	in	r24, 0x05	; 5
      694:	d8 23       	and	r29, r24
      696:	d5 b9       	out	0x05, r29	; 5
-volatile unsigned int ten_us_counter = 0;
-
-unsigned int ultrasound_sensor (unsigned char sensor){
-  unsigned char Echo_Pin = sensor;
-  unsigned char Trigger_Pin = sensor+2;
-  unsigned int distance = 0, duration = 0, timer_LOW = 0, timer_HIGH = 0;
      698:	c0 e0       	ldi	r28, 0x00	; 0
      69a:	d0 e0       	ldi	r29, 0x00	; 0
-  PORTB &= ~(1 << Trigger_Pin); // wait 2us to make sure echo is avoided
-  delay_us(2);
-  PORTB |= (1 << Trigger_Pin); // Activate trigger pin to send out ultrasound noise for 10 us
-  delay_us(10);
-  PORTB &= ~(1 << Trigger_Pin); //turn off the trigger
-  while (!(PINC & (1 << Echo_Pin))){
      69c:	04 c0       	rjmp	.+8      	; 0x6a6 <ultrasound_sensor+0x5c>
-    timer_LOW = ten_us_counter; } //Wait to get back the signal (reach Rising edge)
      69e:	c0 91 ae 01 	lds	r28, 0x01AE	; 0x8001ae <ten_us_counter>
      6a2:	d0 91 af 01 	lds	r29, 0x01AF	; 0x8001af <ten_us_counter+0x1>
-  PORTB &= ~(1 << Trigger_Pin); // wait 2us to make sure echo is avoided
-  delay_us(2);
-  PORTB |= (1 << Trigger_Pin); // Activate trigger pin to send out ultrasound noise for 10 us
-  delay_us(10);
-  PORTB &= ~(1 << Trigger_Pin); //turn off the trigger
-  while (!(PINC & (1 << Echo_Pin))){
      6a6:	86 b1       	in	r24, 0x06	; 6
      6a8:	21 2f       	mov	r18, r17
      6aa:	90 e0       	ldi	r25, 0x00	; 0
@@ -1155,17 +917,8 @@ unsigned int ultrasound_sensor (unsigned char sensor){
      6bc:	00 e0       	ldi	r16, 0x00	; 0
      6be:	10 e0       	ldi	r17, 0x00	; 0
      6c0:	04 c0       	rjmp	.+8      	; 0x6ca <ultrasound_sensor+0x80>
-    timer_LOW = ten_us_counter; } //Wait to get back the signal (reach Rising edge)
-  while (PINC & (1 << Echo_Pin)){
-    timer_HIGH = ten_us_counter; } //Wait for the signal to finish (reach Falling edge)
      6c2:	00 91 ae 01 	lds	r16, 0x01AE	; 0x8001ae <ten_us_counter>
      6c6:	10 91 af 01 	lds	r17, 0x01AF	; 0x8001af <ten_us_counter+0x1>
-  PORTB |= (1 << Trigger_Pin); // Activate trigger pin to send out ultrasound noise for 10 us
-  delay_us(10);
-  PORTB &= ~(1 << Trigger_Pin); //turn off the trigger
-  while (!(PINC & (1 << Echo_Pin))){
-    timer_LOW = ten_us_counter; } //Wait to get back the signal (reach Rising edge)
-  while (PINC & (1 << Echo_Pin)){
      6ca:	86 b1       	in	r24, 0x06	; 6
      6cc:	90 e0       	ldi	r25, 0x00	; 0
      6ce:	02 2e       	mov	r0, r18
@@ -1176,17 +929,12 @@ unsigned int ultrasound_sensor (unsigned char sensor){
      6d8:	e2 f7       	brpl	.-8      	; 0x6d2 <ultrasound_sensor+0x88>
      6da:	80 fd       	sbrc	r24, 0
      6dc:	f2 cf       	rjmp	.-28     	; 0x6c2 <ultrasound_sensor+0x78>
-    timer_HIGH = ten_us_counter; } //Wait for the signal to finish (reach Falling edge)
-  stop_timer();
      6de:	0e 94 d8 02 	call	0x5b0	; 0x5b0 <stop_timer>
-  duration = timer_HIGH - timer_LOW;
      6e2:	b8 01       	movw	r22, r16
      6e4:	6c 1b       	sub	r22, r28
      6e6:	7d 0b       	sbc	r23, r29
-  ten_us_counter = 0;
      6e8:	10 92 af 01 	sts	0x01AF, r1	; 0x8001af <ten_us_counter+0x1>
      6ec:	10 92 ae 01 	sts	0x01AE, r1	; 0x8001ae <ten_us_counter>
-  distance = duration * 0.34 / 2; // 340m/s -> 0.34 cm/10us because we measure distance every 10 microseconds
      6f0:	80 e0       	ldi	r24, 0x00	; 0
      6f2:	90 e0       	ldi	r25, 0x00	; 0
      6f4:	0e 94 05 05 	call	0xa0a	; 0xa0a <__floatunsisf>
@@ -1203,12 +951,9 @@ unsigned int ultrasound_sensor (unsigned char sensor){
      710:	0e 94 d6 04 	call	0x9ac	; 0x9ac <__fixunssfsi>
      714:	6b 01       	movw	r12, r22
      716:	7c 01       	movw	r14, r24
-  delay_ms(60); //Suggested by datasheet to wait 60ms to ultrasound signal interruption
      718:	8c e3       	ldi	r24, 0x3C	; 60
      71a:	90 e0       	ldi	r25, 0x00	; 0
      71c:	0e 94 e1 02 	call	0x5c2	; 0x5c2 <delay_ms>
-  return distance;
-}
      720:	c6 01       	movw	r24, r12
      722:	df 91       	pop	r29
      724:	cf 91       	pop	r28
@@ -1221,70 +966,45 @@ unsigned int ultrasound_sensor (unsigned char sensor){
      732:	08 95       	ret
 
 00000734 <set_pins>:
-  TCCR2B &= ~((1 << CS20) | (1 << CS22));
-  }
-
-void set_pins (void){
-  //Setting Echo pins
-  DDRC &= ~(1 << U_FRONT); //A0 set as input
      734:	87 b1       	in	r24, 0x07	; 7
      736:	8e 7f       	andi	r24, 0xFE	; 254
      738:	87 b9       	out	0x07, r24	; 7
-  DDRC &= ~(1 << U_LEFT); //A1 set as input
      73a:	87 b1       	in	r24, 0x07	; 7
      73c:	8d 7f       	andi	r24, 0xFD	; 253
      73e:	87 b9       	out	0x07, r24	; 7
-  DDRC &= ~(1 << U_RIGHT); // A2 set as input
      740:	87 b1       	in	r24, 0x07	; 7
      742:	8b 7f       	andi	r24, 0xFB	; 251
      744:	87 b9       	out	0x07, r24	; 7
-
-  //Setting Trigger pins
-  DDRB |= (1 << (U_FRONT+2)); //D10 set as output
      746:	84 b1       	in	r24, 0x04	; 4
      748:	84 60       	ori	r24, 0x04	; 4
      74a:	84 b9       	out	0x04, r24	; 4
-  DDRB |= (1 << (U_LEFT+2)); //D11 set as output
      74c:	84 b1       	in	r24, 0x04	; 4
      74e:	88 60       	ori	r24, 0x08	; 8
      750:	84 b9       	out	0x04, r24	; 4
-  DDRB |= (1 << (U_RIGHT+2)); //D12 set as output
      752:	84 b1       	in	r24, 0x04	; 4
      754:	80 61       	ori	r24, 0x10	; 16
      756:	84 b9       	out	0x04, r24	; 4
-
-  //Setting Optocoupler PINS
-  DDRD &= ~(1 << O_LEFT); //D2 set as input
      758:	8a b1       	in	r24, 0x0a	; 10
      75a:	8b 7f       	andi	r24, 0xFB	; 251
      75c:	8a b9       	out	0x0a, r24	; 10
-  DDRD &= ~(1 << O_RIGHT); //D3 set as input
      75e:	8a b1       	in	r24, 0x0a	; 10
      760:	87 7f       	andi	r24, 0xF7	; 247
      762:	8a b9       	out	0x0a, r24	; 10
-
-  //Setting motor pins
-  DDRD |= (1 << IN1); //D4 set as output
      764:	8a b1       	in	r24, 0x0a	; 10
      766:	80 61       	ori	r24, 0x10	; 16
      768:	8a b9       	out	0x0a, r24	; 10
-  DDRD |= (1 << IN2); //D7 set as output
      76a:	8a b1       	in	r24, 0x0a	; 10
      76c:	80 68       	ori	r24, 0x80	; 128
      76e:	8a b9       	out	0x0a, r24	; 10
-  DDRB |= (1 << IN3); //D8 set as output
      770:	84 b1       	in	r24, 0x04	; 4
      772:	81 60       	ori	r24, 0x01	; 1
      774:	84 b9       	out	0x04, r24	; 4
-  DDRB |= (1 << IN4); //D9 set as output
      776:	84 b1       	in	r24, 0x04	; 4
      778:	82 60       	ori	r24, 0x02	; 2
      77a:	84 b9       	out	0x04, r24	; 4
-  DDRD |= (1 << ENA); //D5 set as output
      77c:	8a b1       	in	r24, 0x0a	; 10
      77e:	80 62       	ori	r24, 0x20	; 32
      780:	8a b9       	out	0x0a, r24	; 10
-  DDRD |= (1 << ENB); //D6 set as output
      782:	8a b1       	in	r24, 0x0a	; 10
      784:	80 64       	ori	r24, 0x40	; 64
      786:	8a b9       	out	0x0a, r24	; 10

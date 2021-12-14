@@ -45,6 +45,7 @@ int main(void)
 		printf("Left: %d\n", LeftSensor);
 		printf("Right: %d\n\n", RightSensor);	
 		
+		
 		//There are seven cases our robot can come into contact with a obstacle and needs to avoid it
 		
 		//Case 1: When all three walls are within the defined range
@@ -116,6 +117,7 @@ int main(void)
 		}
 		*/
 		//Case 5: When the front and left is blocked
+		
 		else if (FrontSensor < (DIS_F+20) && RightSensor > DIS && LeftSensor < DIS)
 		{
 			select_motor_direction(STOP, PWM);
@@ -124,7 +126,7 @@ int main(void)
 			
 			select_motor_direction(LEFT, 50); //MAKE SURE THE WIRING IS CORRECT
 			printf("lol\n");
-			opto_turn(5, OP_LEFT);
+			opto_turn(4, OP_LEFT);
 			printf("lol2\n");
 			select_motor_direction(STOP, PWM);
 			
@@ -138,7 +140,7 @@ int main(void)
 			
 			select_motor_direction(RIGHT, 50); //MAKE SURE THE WIRING IS GOOD
 			printf("lol\n");
-			opto_turn(5, OP_RIGHT);
+			opto_turn(4, OP_RIGHT);
 			printf("lol2\n");
 			select_motor_direction(STOP, PWM);
 		}
