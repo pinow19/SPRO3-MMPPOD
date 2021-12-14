@@ -120,7 +120,7 @@ int main(void)
 		*/
 		//Case 5: When the front and left is blocked
 		
-		else if (FrontSensor < (DIS_F) && RightSensor > DIS && LeftSensor < DIS)
+		else if (FrontSensor < DIS_F && RightSensor > DIS && LeftSensor < DIS)
 		{
 			select_motor_direction(STOP, PWML, PWMR);
 			printf("STOPPPPPright\n");
@@ -163,16 +163,30 @@ int main(void)
 			printf("Everything is ok!\n");
 			select_motor_direction(FORWARD, PWML, PWMR);
 			if (RightSensor>LeftSensor){
+				while(RightSensor>LeftSensor){
 				correcting = RightSensor-LeftSensor;
-				PWML = PWML+correcting*10;
+				PWML = PWML;
+				if (PWML>240) PWML = 250;
 				select_motor_direction(FORWARD, PWML, PWMR);
-				printf("Increasing left motor\n");
+				printf("Increasing left motor %d\n", PWML);
+				RightSensor = ultrasound_sensor(U_RIGHT);
+				LeftSensor = ultrasound_sensor(U_LEFT);
+				}
+				PWML = 100;
+				PWMR = 100;
 			}
 			else if (LeftSensor>RightSensor){
+				while (LeftSensor>RightSensor){
 				correcting = LeftSensor-RightSensor;
-				PWMR = PWMR+correcting*30;
+				PWMR = PWMR+correcting;
+				if (PWMR>240) PWMR = 250;
 				select_motor_direction(FORWARD, PWML, PWMR);
-				printf("Increasing right motor\n");
+				printf("Increasing right motor %d\n", PWMR);
+				RightSensor = ultrasound_sensor(U_RIGHT);
+				LeftSensor = ultrasound_sensor(U_LEFT);
+				}
+				PWML = 100;
+				PWMR = 100;
 			}
 		}
 	}
