@@ -19,16 +19,16 @@ int main(void)
 	uart_init();
 	io_redirect();
 	
-	DDRD &= ~(1<<DDD3); //clear the pin PD3
-	DDRD |= 1<<DDD3; //set this pin as input
+	//DDRD &= ~(1<<DDD3); //clear the pin PD3
+	//DDRD |= 1<<DDD3; //set this pin as input
 	
     while (1)
     {
-		if (PIND & 1<<PIND3) //initial contact, but has to wait for the ripple effect
+		if (PIND & 1<<PIND2) //initial contact, but has to wait for the ripple effect
 		{
-			if(PIND & 1<<PIND3) //check again
+			if(PIND & 1<<PIND2) //check again
 			{
-				while(PIND & 1<<PIND3) //start counting the time
+				while(PIND & 1<<PIND2) //start counting the time
 				{
 					_delay_ms(1); //so that everything is a bit slowed down, otherwise it overflows
 					count++;

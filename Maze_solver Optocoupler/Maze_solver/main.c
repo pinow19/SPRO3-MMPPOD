@@ -31,7 +31,7 @@ int main(void)
 	_180_degrees = 2000/2; //ms
 
 	
-	DIS = 20; // we give 5 cm wiggle room for the robot but we want it to be in the middle of the path
+	DIS = 25; // we give 5 cm wiggle room for the robot but we want it to be in the middle of the path
 	DIS_F = 30;
 	
     while (1) 
@@ -118,15 +118,20 @@ int main(void)
 		*/
 		//Case 5: When the front and left is blocked
 		
-		else if (FrontSensor < (DIS_F+20) && RightSensor > DIS && LeftSensor < DIS)
+		else if (FrontSensor < (DIS_F) && RightSensor > DIS && LeftSensor < DIS)
 		{
 			select_motor_direction(STOP, PWM);
 			printf("STOPPPPPright\n");
 			_delay_ms(1000);
 			
-			select_motor_direction(LEFT, 50); //MAKE SURE THE WIRING IS CORRECT
+			
 			printf("lol\n");
-			opto_turn(4, OP_LEFT);
+			for(int i = 0; i<3; i++){
+				select_motor_direction(LEFT, 50); //MAKE SURE THE WIRING IS GOOD
+				opto_turn(3, OP_LEFT);
+				select_motor_direction(STOP, PWM);
+				_delay_ms(200);
+			}
 			printf("lol2\n");
 			select_motor_direction(STOP, PWM);
 			
@@ -138,9 +143,14 @@ int main(void)
 			printf("STOPPPPPleft\n");
 			_delay_ms(1000);
 			
-			select_motor_direction(RIGHT, 50); //MAKE SURE THE WIRING IS GOOD
+			 
 			printf("lol\n");
-			opto_turn(4, OP_RIGHT);
+			for(int i = 0; i<3; i++){
+			select_motor_direction(RIGHT, 50); //MAKE SURE THE WIRING IS GOOD
+			opto_turn(3, OP_RIGHT);
+			select_motor_direction(STOP, PWM);
+			_delay_ms(200);
+			}
 			printf("lol2\n");
 			select_motor_direction(STOP, PWM);
 		}

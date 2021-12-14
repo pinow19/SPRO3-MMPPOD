@@ -11,7 +11,7 @@
 volatile int count_opto = 0, count_off = 0;
 double rpm = 0;
 int slids = 0;
-
+int flag_opto = 0;
 
 
 int opto_turn(int turns, int side)
