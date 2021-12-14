@@ -23,7 +23,7 @@ unsigned int ultrasound_sensor (unsigned char);
 void delay_ms (unsigned int);
 void delay_us (unsigned int);
 void set_pins (void);
-void select_motor_direction (unsigned char, unsigned char);
+void select_motor_direction (unsigned char, unsigned char, unsigned char);
 
 
 #endif

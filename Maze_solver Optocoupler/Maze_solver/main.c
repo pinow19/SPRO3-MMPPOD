@@ -17,6 +17,7 @@
 int flagg = 0;
 int originalF = 0;
 int count = 0;
+int correcting = 0;
 
 int main(void)
 {
@@ -32,11 +33,12 @@ int main(void)
 
 	
 	DIS = 25; // we give 5 cm wiggle room for the robot but we want it to be in the middle of the path
-	DIS_F = 30;
+	DIS_F = 20;
 	
     while (1) 
     {
-		int PWM = 100;
+		int PWMR = 100;
+		int PWML = 100;
 		FrontSensor = ultrasound_sensor(U_FRONT);
 		RightSensor = ultrasound_sensor(U_RIGHT);
 		LeftSensor = ultrasound_sensor(U_LEFT);
@@ -54,18 +56,18 @@ int main(void)
 			printf("All three walls wrong\n");
 			if (RightSensor > LeftSensor)
 			{
-							select_motor_direction(STOP, PWM);
+							select_motor_direction(STOP, PWML, PWML);
 							printf("STOPPPPP\n");
 							_delay_ms(1000);
-				select_motor_direction(RIGHT, PWM);
+				select_motor_direction(RIGHT, PWML, PWMR);
 				_delay_ms(_180_degrees); //Time to turn the robot 180degrees
 			} 
 			else
 			{
-							select_motor_direction(STOP, PWM);
+							select_motor_direction(STOP, PWML, PWMR);
 							printf("STOPPPPP\n");
 							_delay_ms(1000);
-				select_motor_direction(LEFT, PWM);
+				select_motor_direction(LEFT, PWML, PWMR);
 				_delay_ms(_180_degrees);
 			}
 		}
@@ -76,18 +78,18 @@ int main(void)
 			printf("Front wall ahead\n");
 			if (RightSensor > LeftSensor)
 			{
-							select_motor_direction(STOP, PWM);
+							select_motor_direction(STOP, PWML, PWMR);
 							printf("STOPPPPP\n");
 							_delay_ms(1000);
-				select_motor_direction(RIGHT, PWM);
+				select_motor_direction(RIGHT, PWML, PWMR);
 				_delay_ms(_90_degrees);
 			} 
 			else
 			{
-							select_motor_direction(STOP, PWM);
+							select_motor_direction(STOP, PWML, PWMR);
 							printf("STOPPPPP\n");
 							_delay_ms(1000);
-				select_motor_direction(LEFT, PWM);
+				select_motor_direction(LEFT, PWML, PWMR);
 				_delay_ms(_90_degrees);
 			}
 		}
@@ -120,46 +122,58 @@ int main(void)
 		
 		else if (FrontSensor < (DIS_F) && RightSensor > DIS && LeftSensor < DIS)
 		{
-			select_motor_direction(STOP, PWM);
+			select_motor_direction(STOP, PWML, PWMR);
 			printf("STOPPPPPright\n");
 			_delay_ms(1000);
 			
 			
 			printf("lol\n");
 			for(int i = 0; i<3; i++){
-				select_motor_direction(LEFT, 50); //MAKE SURE THE WIRING IS GOOD
+				select_motor_direction(LEFT, 100, 100); //MAKE SURE THE WIRING IS GOOD
 				opto_turn(3, OP_LEFT);
-				select_motor_direction(STOP, PWM);
+				select_motor_direction(STOP, PWML, PWMR);
 				_delay_ms(200);
 			}
 			printf("lol2\n");
-			select_motor_direction(STOP, PWM);
+			select_motor_direction(STOP, PWML, PWMR);
 			
 		}
 		//Case 6: When the front and right is blocked
 		else if (FrontSensor < DIS_F && RightSensor < DIS && LeftSensor > DIS)
 		{
-			select_motor_direction(STOP, PWM);
+			select_motor_direction(STOP, PWML, PWMR);
 			printf("STOPPPPPleft\n");
 			_delay_ms(1000);
 			
 			 
 			printf("lol\n");
 			for(int i = 0; i<3; i++){
-			select_motor_direction(RIGHT, 50); //MAKE SURE THE WIRING IS GOOD
+			select_motor_direction(RIGHT, 100, 100); //MAKE SURE THE WIRING IS GOOD
 			opto_turn(3, OP_RIGHT);
-			select_motor_direction(STOP, PWM);
+			select_motor_direction(STOP, PWML, PWMR);
 			_delay_ms(200);
 			}
 			printf("lol2\n");
-			select_motor_direction(STOP, PWM);
+			select_motor_direction(STOP, PWML, PWMR);
 		}
 		
 		//Case 7: If the sides are small but the front is free or all sides are free then move forward
 		else
 		{
 			printf("Everything is ok!\n");
-			select_motor_direction(FORWARD, PWM);
+			select_motor_direction(FORWARD, PWML, PWMR);
+			if (RightSensor>LeftSensor){
+				correcting = RightSensor-LeftSensor;
+				PWML = PWML+correcting*10;
+				select_motor_direction(FORWARD, PWML, PWMR);
+				printf("Increasing left motor\n");
+			}
+			else if (LeftSensor>RightSensor){
+				correcting = LeftSensor-RightSensor;
+				PWMR = PWMR+correcting*30;
+				select_motor_direction(FORWARD, PWML, PWMR);
+				printf("Increasing right motor\n");
+			}
 		}
 	}
 }

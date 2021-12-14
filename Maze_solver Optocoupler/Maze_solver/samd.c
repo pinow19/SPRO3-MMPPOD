@@ -35,7 +35,7 @@ unsigned int ultrasound_sensor (unsigned char sensor){
   return distance;
 }
 
-void select_motor_direction (unsigned char direction, unsigned char PWM){
+void select_motor_direction (unsigned char direction, unsigned char PWML, unsigned char PWMR){
   setup_motors();
   switch (direction)
   {
@@ -46,8 +46,8 @@ void select_motor_direction (unsigned char direction, unsigned char PWM){
     PORTB |= (1 << IN3);
     PORTB &= ~(1 << IN4);
 
-		OCR0A = PWM; //ENB
-		OCR0B = PWM; //ENA
+		OCR0A = PWMR; //ENB
+		OCR0B = PWML; //ENA
 
     break;
 
@@ -58,8 +58,8 @@ void select_motor_direction (unsigned char direction, unsigned char PWM){
     PORTB &= ~(1 << IN3);
     PORTB |= (1 << IN4);
 
-	OCR0A = PWM; //ENB
-	OCR0B = PWM; //ENA
+	OCR0A = PWMR; //ENB
+	OCR0B = PWML; //ENA
 
     break;
   
@@ -72,8 +72,8 @@ void select_motor_direction (unsigned char direction, unsigned char PWM){
     PORTB |= (1 << IN3);
     PORTB &= ~(1 << IN4);
 
-	OCR0A = PWM; //ENB
-	OCR0B = PWM; //ENA
+	OCR0A = PWMR; //ENB
+	OCR0B = PWML; //ENA
 
     break;
   
@@ -86,8 +86,8 @@ void select_motor_direction (unsigned char direction, unsigned char PWM){
     PORTB &= ~(1 << IN3);
     PORTB |= (1 << IN4);
 
-	OCR0A = PWM; //ENB
-	OCR0B = PWM; //ENA
+	OCR0A = PWMR; //ENB
+	OCR0B = PWML; //ENA
 
   break;
   
