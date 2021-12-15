@@ -37,19 +37,19 @@ int main(void)
 		printf("Left: %d cm\n", LeftSensor);
 		printf("Right: %d cm\n", RightSensor);
 		
-		if ((LeftSensor >= 10) && (LeftSensor <= 20) && ())
+		if ((LeftSensor >= 10) && (LeftSensor <= 20) && (FrontSensor >= DIS_F))
 		{
 			printf("\nGoing forward\n");
 			select_motor_direction(FORWARD, PWM);
 		}
-		else if (LeftSensor > 20)
+		else if ((LeftSensor > 20) && (FrontSensor >= DIS_F))
 		{
 			printf("\nMissing left wall - need to close in\n");
 			select_motor_direction(LEFT, PWM);
 			_delay_ms(200);
 			select_motor_direction(FORWARD, PWM);
 		}
-		else if (LeftSensor < 10)
+		else if ((LeftSensor < 10) && (FrontSensor >= DIS_F))
 		{
 			printf("\nClose to left wall - need to turn right\n");
 			select_motor_direction(RIGHT, PWM);
