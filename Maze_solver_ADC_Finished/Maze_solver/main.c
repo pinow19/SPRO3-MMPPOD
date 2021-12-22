@@ -44,7 +44,7 @@ int main(void)
 			{
 				while (1)
 				{
-					//infinite loop  ´danie_szanka_the<-cat<-destroyer<-6<-<9_dog<-_lover    
+					//infinite loop
 				}
 			}
 		}
